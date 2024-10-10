@@ -1,10 +1,44 @@
 
+//load page preloader
+
+
 const { innerHeight } = window;
-// window.onload= function(){
-//     document.getElementById("myAudio"). play();
-// }
-// var vid= document.getElementById("myAudio");
-// vid.volume = 0.2;
+
+
+function animLoad() {
+    let tl = new TimelineMax({ paused: true });
+
+    tl.staggerFrom("nav.nav > .anim", 0.8, {
+        y: 100,
+        opacity: 0,
+        ease: Expo.easeInOut
+    }, "0.1", "+=1.2");
+    tl.staggerFrom(".header__bott-scroll, .header__social-item", 0.8, {
+        y: 100,
+        opacity: 0,
+        ease: Expo.easeInOut
+    }, "0.1", "-=0.8");
+    tl.staggerFrom(".img_bg", 0.8, {
+        height: 100,
+        opacity: 0,
+        ease: Expo.easeInOut
+    }, "0.1", "-=0.5");
+    tl.staggerFrom(".header__let, .header__num", 0.8, {
+        x: -100,
+        opacity: 0,
+        ease: Expo.easeInOut
+    }, "0.1", "-=0.5");
+    tl.staggerFrom(".header__title > span", 0.8, {
+        y: 100,
+        opacity: 0,
+        ease: Expo.easeInOut
+    }, "0.1", "-=0.8");
+
+    tl.reverse();
+    $(document).ready(function () {
+        tl.reversed(!tl.reversed())
+    });
+}
 const isMobile = window.innerWidth < 1000; // Change 768px based on your breakpoint
 
 function animateTimeline() {
@@ -186,9 +220,9 @@ function animateTimeline() {
         },
         "-=2"
     );
-    tl.to( "#spando-about", {
-        x:100, 
-        scale : .8,        // Move up by 20px
+    tl.to("#spando-about", {
+        x: 100,
+        scale: .8,        // Move up by 20px
         duration: 1,    // Duration of each movement (up or down)
         ease: "power1.inOut",  // Smooth easing for better animation flow
         repeat: -1,     // Repeat infinitely
@@ -216,7 +250,34 @@ function animateTimeline() {
 gsap.registerPlugin(ScrollTrigger);
 
 
-window.addEventListener("load", animateTimeline);
+window.addEventListener("load", () => {
+    const preloader = document.querySelector('.preloader');
+    const preloaderBox = document.querySelector('.preloader__box');
+    const preloaderTxt = document.querySelector('.preloader__txt');
+  
+    setTimeout(() => {
+        preloaderBox.classList.add('active');
+        preloaderTxt.classList.add('active');
+        preloader.classList.add('active');
+        animLoad();
+    }, 1000)
+    
+    gsap.to(window, {
+        scrollTrigger: {
+          trigger: "body",
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 1, // يحدد مدى السلاسة في التمرير
+        },
+        scrollTo: {
+          y: "+=1000", // يحدد مقدار التمرير العمودي
+          autoKill: false // يضمن أن التمرير سيبقى حتى عند انتهاء الحركة
+        },
+        ease: "power1.out" // نوع التأثير (ease)
+      });
+});
+
+animateTimeline();
 
 // gsap.to("#zoom-in h1", {
 //     scale: 100, stagger: 0.25, duration: 3,
@@ -228,9 +289,7 @@ window.addEventListener("load", animateTimeline);
 //     }
 // });
 
-
-
-window.addEventListener("load", () => {
+function zoom()  {
 
     gsap
         .timeline({
@@ -249,12 +308,12 @@ window.addEventListener("load", () => {
         })
         .to("#zoom-in img", {
             scale: 500,
-            display : "none",
-            duration:  3,
+            display: "none",
+            duration: 3,
             ease: "power4.inOut"
         })
         .to(".about-1", {
-            y : -100 ,
+            y: -100,
             opacity: 1,
             duration: 1,
             ease: "power3.inOut"
@@ -284,4 +343,7 @@ window.addEventListener("load", () => {
     //      height : "100vh",
     //     ease : "power2.inOut"
     // })
-});
+};
+zoom();
+
+// window.addEventListener("load", )
